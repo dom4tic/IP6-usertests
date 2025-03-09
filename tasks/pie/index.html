@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="de">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../../dimensionalCharting/css/styles.css">
+        <title>Pie Chart</title>
+        <style>
+            body {
+                height: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .container {
+                display: flex;
+                max-width: 50%;
+
+                .legend {
+                    margin-top: 7%;
+                }
+
+                .chart {
+                    max-width: 80%;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="chart" id="chart"></div>
+            <div class="legend" id="chart-legend"></div>
+        </div>
+
+        <div id="popup"></div>
+
+        <script type="module" src="starter.js"></script>
+    </body>
+</html>

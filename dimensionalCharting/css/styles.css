@@ -1,0 +1,85 @@
+@import "colors.css";
+@import "fonts.css";
+
+head, body {
+    height: 100%;
+    h1 {
+        font-family: Work-Sans, system-ui;
+        font-weight: var(--font-header-weight);
+        font-size:   1.5em;
+        color:       var(--font-color);
+    }
+}
+
+#popup {
+    position: absolute;
+
+    padding:       .5em .75em;
+    border:        .08em solid var(--grey98);
+    border-radius: .4em;
+
+    background-color: var(--white);
+    font-family:      var(--font-family), system-ui;
+    font-weight:      var(--font-weight-light);
+    font-size:        var(--font-size);
+    color:            var(--font-color);
+
+    pointer-events: none;
+    opacity:        0;
+    transition:     opacity var(--animation-duration) ease-in-out;
+
+    -webkit-user-select: none;
+    -moz-user-select:    none;
+    -ms-user-select:     none;
+    user-select:         none;
+}
+
+.container {
+    width: 100%;
+    max-width: 100%;
+
+    .chart-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        width: 100%;
+    }
+
+    .chart-container {
+        display: flex;
+        flex: 1;
+        min-width: 32em;
+
+        .legend {
+            padding-top: .4em;
+        }
+    }
+
+    .chart {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .legend {
+        flex: 0 0 150px;
+    }
+}
+
+
+/* Tabelle anpassen */
+#data-table {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.scroll-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.rubberband {
+    fill:          var(--contrast-blue);
+    opacity:       .15;
+    stroke:        var(--color0);
+    stroke-width: .04em;
+}

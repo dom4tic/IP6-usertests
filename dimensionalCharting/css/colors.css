@@ -1,0 +1,48 @@
+:root {
+    /* COLORS */
+    --color0:  #6C13FF;
+    --color1:  #8C49FE;
+    --color2:  #AD75FC;
+    --color3:  #C79EF9;
+    --color4:  #DDC7F5;
+    --color5:  #EDD7E6;
+    --color6:  #F5CDD2;
+    --color7:  #F4A8B4;
+    --color8:  #F18297;
+    --color9:  #EA577B;
+    --color10: #D73875;
+
+    --contrast-blue: #AD75FC;
+    --contrast-red:  #F18297;
+
+    /* GRADIENTS */
+    --white:  #FDFCFF;
+    --grey98: #E4E4E4;
+    --grey90: #D5D4D7;
+    --grey80: #C2C0C4;
+    --grey60: #9A979F;
+    --grey40: #736F79;
+    --black:  #0E0719;
+
+    --background-color: var(--white);
+    --drop-shadow: 0 .1em .1em var(--grey60, 0.25);
+    --animation-duration: .2s;
+
+    /* FONT-HEADER */
+    --font-header-family: work-sans, system-ui;
+    --font-header-size:   1em;
+    --font-header-weight: 300;
+    --font-header-color:  var(--black);
+
+    /* FONT-BODY */
+    --font-family:       sora;
+    --font-table-family: DJR;
+    --font-size:         .9em;
+    --font-weight:       200;
+    --font-weight-light: 100;
+    --font-weight-bold:  400;
+    --font-color:        var(--grey40);
+    --font-color-dark:   var(--black);
+    --font-color-light:  var(--grey80);
+
+}

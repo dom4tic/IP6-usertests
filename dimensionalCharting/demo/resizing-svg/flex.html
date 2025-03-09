@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SVGs nebeneinander</title>
+  <style>
+    body, html {
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      gap: 12px;
+      padding: 12px;
+      box-sizing: border-box;
+    }
+
+    .top-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="top-row">
+    <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+      <rect x="1.5" y="1.5" width="117" height="117" stroke="red" stroke-width="6" fill="none" />
+      <line x1="0" y1="0" x2="120" y2="120" stroke="red" stroke-width="3" />
+      <line x1="0" y1="120" x2="120" y2="0" stroke="red" stroke-width="3" />
+    </svg>
+    <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+      <rect x="1.5" y="1.5" width="117" height="117" stroke="blue" stroke-width="6" fill="none" />
+      <line x1="0" y1="0" x2="120" y2="120" stroke="blue" stroke-width="3" />
+      <line x1="0" y1="120" x2="120" y2="0" stroke="blue" stroke-width="3" />
+    </svg>
+    <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+      <rect x="1.5" y="1.5" width="117" height="117" stroke="green" stroke-width="6" fill="none" />
+      <line x1="0" y1="0" x2="120" y2="120" stroke="green" stroke-width="3" />
+      <line x1="0" y1="120" x2="120" y2="0" stroke="green" stroke-width="3" />
+    </svg>
+  </div>
+
+  <!-- preserveAspectRatio="none" is important to fill all the space -->
+  <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <rect x="1.5" y="1.5" width="117" height="117" stroke="pink" stroke-width="6" fill="none" />
+    <line x1="0" y1="0" x2="120" y2="120" stroke="pink" stroke-width="3" />
+    <line x1="0" y1="120" x2="120" y2="0" stroke="pink" stroke-width="3" />
+  </svg>
+</div>
+
+</body>
+</html>

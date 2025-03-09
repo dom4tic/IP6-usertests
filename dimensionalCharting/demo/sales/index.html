@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../css/styles.css">
+    <title>Sales</title>
+
+    <style>
+        h3 {
+            font-family: var(--font-header-family), system-ui;
+            font-weight: var(--font-weight);
+        }
+
+        .chart-context {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="chart-row" style="padding-bottom: 64px; justify-content: center">
+        <div class="chart-context">
+            <h3>Categories</h3>
+            <div class="chart-container">
+                <div id="chart" class="chart"></div>
+                <div id="chart-legend" class="legend"></div>
+            </div>
+        </div>
+        <div class="chart-context">
+            <h3>Regions</h3>
+            <div class="chart-container">
+                <div id="chartTwo" class="chart"></div>
+                <div class="legend" id="spacer"></div>
+            </div>
+        </div>
+        <div class="chart-context">
+            <h3>Sales per day</h3>
+            <div class="chart-container">
+                <div id="chartThree" class="chart"></div>
+                <div class="legend" id="spacer2"></div>
+            </div>
+        </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; align-items: center">
+        <h3>Sales</h3>
+        <div id="data-table" style="height: 400px; width: 50%; min-width: 500px"></div>
+    </div>
+</div>
+
+<div id="popup"></div>
+
+<script type="module" src="./starter.js"></script>
+</body>
+</html>

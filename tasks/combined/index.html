@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../dimensionalCharting/css/styles.css">
+    <title>Sales</title>
+
+    <style>
+        h3 {
+            font-family: var(--font-header-family), system-ui;
+            font-weight: var(--font-weight);
+        }
+
+        .chart-context {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+<div class="container" style="width: 70%; justify-self: center;">
+    <div class="chart-row" style="padding-bottom: 64px; justify-content: center">
+        <div class="chart-context">
+            <h3>Regions</h3>
+            <div class="chart-container">
+                <div id="barChart" class="chart"></div>
+            </div>
+        </div>
+        <div class="chart-context">
+            <h3>Sales per day</h3>
+            <div class="chart-container">
+                <div id="lineChart" class="chart"></div>
+            </div>
+        </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; align-items: center">
+        <h3>Sales</h3>
+        <div id="data-table" style="height: 400px; min-width: 500px"></div>
+    </div>
+</div>
+
+<div id="popup"></div>
+
+<script type="module" src="./starter.js"></script>
+</body>
+</html>

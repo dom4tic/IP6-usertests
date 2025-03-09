@@ -1,0 +1,19 @@
+@font-face {
+    font-family: "Work-Sans";
+    src: url("fonts/WorkSans-VariableFont_wght.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Sora";
+    src: url("fonts/Sora-VariableFont_wght.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "SourceCodePro";
+    src: url("fonts/SourceCodePro-VariableFont_wght.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "DJR";
+    src: url("fonts/FormaDJRMono-Light-Edu.ttf") format("truetype");
+}
