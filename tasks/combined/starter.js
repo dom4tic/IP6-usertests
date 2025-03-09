@@ -48,7 +48,12 @@ import { DottedLineProjector }        from "../../dimensionalCharting/chart/proj
  *    and the y value accessor to the group ({@link IPartition}) value.
  *  - Create the selection & hotspot controller
  */
-const barChartController = undefined;
+const barChartController = ChartController(a => a.region, reduceCount);
+barChartController.setXAxisValueAccessor(p => p.getKey());
+barChartController.setYAxisValueAccessor(p => p.getValue());
+
+const barSelectionController = MultiSelectionController();
+const barHotspotController   = HotspotController();
 
 /**
  * Step 2: CoordinatesController
@@ -61,7 +66,10 @@ const barChartController = undefined;
  * range of the displayed coordinate system. In case of a categorical axis the range must be `undefined`.
  */
 
-const barCoordsController = undefined;
+const barCoordsController = CoordinatesController(
+    barChartController.getXAxisValueAccessor(), undefined,
+    barChartController.getYAxisValueAccessor(), { min: 0, max: 120 }
+);
 
 /**
  * Step 3: Render the Bar Chart
@@ -74,21 +82,41 @@ const barCoordsController = undefined;
  */
 const barChartRoot = document.getElementById("barChart");
 
-const barChart = undefined;
-const [barChartAxisGroup, barAxisLabelSizeAdjuster] = [undefined, undefined];
-const [barChartYAxisTickMark, barYLabelAdjuster]    = [undefined, undefined];
-const [barChartXAxisTickMark, barXLabelAdjuster]    = [undefined, undefined];
+const barChart = BarChartProjector({
+    chartController:       barChartController,
+    coordinatesController: barCoordsController,
+    selectionController:   barSelectionController,
+    hotspotController:     barHotspotController,
+    viewBox:               viewBox
+});
+const [barChartAxisGroup, barAxisLabelSizeAdjuster] = SimpleAxisProjector(viewBox.width, true, true, "Regions", "Number of sales");
+const [barChartYAxisTickMark, barYLabelAdjuster]    = NumericGridLineProjector({
+    chartController:       barChartController,
+    coordinatesController: barCoordsController,
+    selectionController:   barSelectionController,
+    hotspotController:     barHotspotController,
+    viewboxLength:         viewBox.height,
+    type:                  GridLinesTypes.HORIZONTAL
+});
+const [barChartXAxisTickMark, barXLabelAdjuster]    = CategoricTickMarkProjector({
+    chartController:       barChartController,
+    coordinatesController: barCoordsController,
+    selectionController:   barSelectionController,
+    hotspotController:     barHotspotController,
+    viewboxLength:         viewBox.width,
+    type:                  AxisTypes.X_AXIS
+});
 
 /**
  * TODO: Append all elements to the corresponding HTML element (e.g. element with id "barChart").
  */
-const barChartSvg = undefined;
+const barChartSvg  = createSVG("bar-chart", viewBox);
 
-/*barChartSvg.appendChild(barChartAxisGroup);
+barChartSvg.appendChild(barChartAxisGroup);
 barChartSvg.appendChild(barChartYAxisTickMark);
 barChartSvg.appendChild(barChartXAxisTickMark);
 barChartSvg.appendChild(barChart);
-barChartRoot.appendChild(barChartSvg);*/
+barChartRoot.appendChild(barChartSvg);
 
 /**
  * To support the dynamic labels we need to add the function {@link resizeBarLabels} and call it
@@ -106,10 +134,21 @@ const resizeBarLabels = () => {
     barXLabelAdjuster(barCurrentWidth);
 };
 
+barChartController.onPartitionsChanged(_ => {
+    resizeBarLabels();
+});
+
+window.addEventListener("resize", () => {
+    resizeBarLabels();
+});
+
 /**
  * Step 4: Update data
  * TODO: update the data of the chart controller, use `salesData`.
  */
+
+barChartController.updateData(salesData);
+
 
 // --------------------------------------------  Task 2  ---------------------------------------------------------------
 
@@ -129,9 +168,15 @@ const months = {
     6: "Jul", 7: "Aug", 8: "Sep", 9: "Oct", 10: "Nov", 11: "Dec"
 };
 
-const lineChartController = undefined;
+const lineChartController = ChartController(a => months[new Date(a.date).getMonth()], reduceSum(s => s.sales));
+lineChartController.setXAxisValueAccessor(p => p.getKey());
+lineChartController.setYAxisValueAccessor(p => p.getValue());
+const lineSelectionController = MultiSelectionController();
+const lineHotspotController = HotspotController();
 
-const lineCoordsController = undefined;
+const lineCoordsController = CoordinatesController();
+lineCoordsController.setupX(lineChartController.getXAxisValueAccessor(), undefined);
+lineCoordsController.setupY(lineChartController.getYAxisValueAccessor(), {min: 0, max: 1_000_000});
 
 /**
  * Step 2: Render the Line Chart
@@ -145,16 +190,38 @@ const lineCoordsController = undefined;
  */
 const lineChartSvg  = createSVG("line-chart", viewBox);
 
-const lineChart = undefined;
-const [lineChartAxisGroup, lineAxisLabelSizeAdjuster] = [undefined, undefined];
-const [lineChartYAxisTickMark, lineYLabelAdjuster]    = [undefined, undefined];
-const [lineChartXAxisTickMark, lineXLabelAdjuster]    = [undefined, undefined];
+const lineChart = SmoothLineChartProjector({
+    chartController:       lineChartController,
+    coordinatesController: lineCoordsController,
+    selectionController:   lineSelectionController,
+    hotspotController:     lineHotspotController,
+    viewBox:               viewBox,
+    svgId:                 lineChartSvg.id
+});
+const [lineChartAxisGroup, lineAxisLabelSizeAdjuster] = SimpleAxisProjector(viewBox.width, true, true, "Month", "Sales");
+const [lineChartYAxisTickMark, lineYLabelAdjuster]    = NumericTickMarkProjector({
+    chartController:       lineChartController,
+    coordinatesController: lineCoordsController,
+    selectionController:   lineSelectionController,
+    hotspotController:     lineHotspotController,
+    viewboxLength:         viewBox.height,
+    type:                  AxisTypes.Y_AXIS
+});
+const [lineChartXAxisTickMark, lineXLabelAdjuster]    = CategoricTickMarkProjector({
+    chartController:       lineChartController,
+    coordinatesController: lineCoordsController,
+    selectionController:   lineSelectionController,
+    hotspotController:     lineHotspotController,
+    viewboxLength:         viewBox.width,
+    type:                  AxisTypes.X_AXIS
+});
 
 /**
  * This projector draws a line from the data point to the axis when the point is on hotpsot.
  * TODO: uncomment the projector & adjust the variable names
  */
-// const [chartDottedLine] = DottedLineProjector(chartController, coordsController, selectionController, hotspotController, viewBox.width);
+const [chartDottedLine] = DottedLineProjector(lineChartController, lineCoordsController, lineSelectionController, lineHotspotController, viewBox.width);
+
 
 /**
  * Step 3: Appending the elements to the HTML
@@ -164,18 +231,41 @@ const [lineChartXAxisTickMark, lineXLabelAdjuster]    = [undefined, undefined];
  */
 
 const lineChartRoot = document.getElementById("lineChart");
-
+lineChartSvg.appendChild(lineChartAxisGroup);
+lineChartSvg.appendChild(lineChartYAxisTickMark);
+lineChartSvg.appendChild(lineChartXAxisTickMark);
+lineChartSvg.appendChild(chartDottedLine);
+lineChartSvg.appendChild(lineChart);
+lineChartRoot.appendChild(lineChartSvg);
 
 /**
  * TODO:
  *  - Create a `resizeLineLabels` function and call it on `window resize` and when the partitions change `onPartitionsChanged`.
  */
+const resizeLineLabels = () => {
+    const lineBoundingRect = lineChartSvg.getBoundingClientRect();
+    const lineCurrentWidth = lineBoundingRect.width;
+    lineAxisLabelSizeAdjuster(lineCurrentWidth);
+    lineYLabelAdjuster(lineCurrentWidth);
+    lineXLabelAdjuster(lineCurrentWidth);
+};
 
-const resizeLineLabels = () => {};
+lineChartController.onPartitionsChanged(_ => {
+    resizeLineLabels();
+});
+
+window.addEventListener("resize", () => {
+    resizeLineLabels();
+});
+
 /**
  * Step 4: Update data
  * TODO: update the data of the chart controller, use `salesData`.
  */
+
+lineChartController.updateData(salesData);
+
+
 
 // --------------------------------------------  Task 3  ---------------------------------------------------------------
 
@@ -188,7 +278,9 @@ const resizeLineLabels = () => {};
 const groupBy = a => [...Object.values(a)];
 const groupFn = identity;
 
-const tableChartController = undefined;
+const tableChartController     = ChartController(groupBy, groupFn);
+const tableSelectionController = MultiSelectionController();
+const tableHotspotController   = HotspotController();
 
 /**
  * Step 2: Render the Data Table
@@ -204,17 +296,27 @@ const tableRoot = document.getElementById("data-table");
 const columns = [
     {label: 'Date',         format: a => new Date(a.date).toLocaleDateString("de-CH")},
     {label: 'Region',       format: a => a.region},
-    /** TODO: extend with the columns you want to show */
+    {label: 'Category',     format: a => a.category},
+    {label: 'Units sold',   format: a => a.unitsSold},
+    {label: 'Sales [$]',    format: a => a.sales},
+    {label: 'Profit [$]',   format: a => a.profit}
 ];
 
-const table = undefined;
+const table = TableProjector({
+    chartController:     tableChartController,
+    selectionController: tableSelectionController,
+    hotspotController:   tableHotspotController,
+    columns:             columns
+});
 
-// tableRoot.appendChild(table);
+tableRoot.appendChild(table);
 
 /**
  * Step 3: Update data
  * TODO: update the data of the chart controller, use `salesData`.
  */
+
+tableChartController.updateData(salesData);
 
 
 // --------------------------------------------  Task 5  ---------------------------------------------------------------
@@ -229,9 +331,9 @@ const table = undefined;
 
 /** You might need to adjust the names of the controllers according to your naming */
 const charts = [
-    // {chartController: barChartController,   selectionController: barSelectionController},
-    // {chartController: lineChartController,  selectionController: lineSelectionController},
-    // {chartController: tableChartController, selectionController: tableSelectionController},
+    {chartController: barChartController,   selectionController: barSelectionController},
+    {chartController: lineChartController,  selectionController: lineSelectionController},
+    {chartController: tableChartController, selectionController: tableSelectionController},
 ];
 
-const dimChartController = undefined;
+const dimChartController = DimensionalChartController(salesData, charts);

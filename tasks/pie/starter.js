@@ -1,5 +1,5 @@
 /**
- * In this file we will create a simple pie chart using the dimensional charting library.
+ * In this file we will create a simple pie chart using the Kolibri library.
  * You will also integrate a legend and support user interactions such as selections and hover effects.
  * You won't need to change anything in the `index.html` file but take a look at the file.
  */
@@ -46,13 +46,13 @@ const legend = document.getElementById("chart-legend");
  */
 
 // TODO: define a function which returns the category of a sales
-const groupBy = undefined;
+const groupBy = s => s.category;
 
 /** TODO: make use of the helper function {@link reduceSum} to sum the `sales` of each category */
-const groupFn = undefined;
+const groupFn = reduceSum(s => s.sales);
 
 /** TODO: create a chart controller {@link ChartController } */
-const chartController = undefined;
+const chartController = ChartController(groupBy, groupFn);
 
 /**
  * The chart controller support different value accessor which the charts are using:
@@ -63,11 +63,11 @@ const chartController = undefined;
  * Every controller and chart works with {@link IPartition} which is the result of the group function.
  * TODO: set the size value accessor of the `chartController` to the value of the partition.
  */
-
+chartController.setSizeValueAccessor( p => p.getValue());
 
 /** TODO: create a selection controller {@link MultiSelectionController} and a hotspot controller {@link HotspotController} */
-const selectionController = undefined;
-const hotspotController   = undefined;
+const selectionController = MultiSelectionController();
+const hotspotController   = HotspotController();
 
 /**
  * Step 4: Base SVG
@@ -80,7 +80,7 @@ const hotspotController   = undefined;
 /** @type ViewBoxType */ const viewBox = {x: 0, y: 0, width: 120, height: 120};
 
 /** TODO: use the helper function {@link createSVG} to create the svg element the chart will be drawn in (define an id) */
-const svg = undefined;
+const svg = createSVG("pie-chart", viewBox);
 
 /**
  * Step 5: Projectors
@@ -90,18 +90,28 @@ const svg = undefined;
  *
  * TODO: create a {@link PieChartProjector} and a {@link LegendProjector} using the controllers created above.
  */
-const chartSvg = undefined;
-const legendElement = undefined;
+const chartSvg = PieChartProjector({
+    chartController,
+    selectionController,
+    hotspotController,
+    viewBox
+});
+const legendElement = LegendProjector({
+    chartController,
+    hotspotController,
+    selectionController
+});
 
 /**
  * Step 6: Append the projectors to the HTML elements
  * Now we need to append the created elements to the according HTML elements.
  * TODO: append the legend elements to the legend HTML element
  */
-
+legend.appendChild(legendElement);
 
 /** TODO: append the chart elements to the svg (created with {@link createSVG}) and then the svg  to the chart HTML element*/
-
+svg.appendChild(chartSvg);
+chart.appendChild(svg);
 
 /**
  * Step 7: Update the data
@@ -109,3 +119,4 @@ const legendElement = undefined;
  * Finally, we need to fill the chart with the data, we can do that by updating the data on the chart controller.
  * TODO: Update the data on the chart controller {@link ChartController} using the {@link salesData} dataset.
  */
+chartController.updateData(salesData);
