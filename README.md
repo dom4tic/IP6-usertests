@@ -18,7 +18,7 @@ effects, making it easy to add dynamic data visuals to web apps.
    Before you look at any solutions you better have a look at the files in `./dimensionalCharting/demo`. If you need any help or wish to compare your results, solutions are available in the `solution` branch.
 
 3. **Open HTML Files in a Browser:**  
-   To complete each task, open the respective HTML file in your browser. Detailed instructions for each task are provided within the JS files.
+   To complete each task, serve the respective HTML file using a dev server and open it in your browser (Jetbrains does that if you rightklick the file and select run 'index.html'). Detailed instructions for each task are provided within the JS files.
 
 ## Tasks
 
