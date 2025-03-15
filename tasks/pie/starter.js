@@ -8,20 +8,23 @@
  * Step 1: Imports
  * Here we already put all the imports you need to create a pie chart.
  */
-import { salesData }                from "../../dimensionalCharting/data/datasets.js";
-import { ChartController }          from "../../dimensionalCharting/chart/controller/chartController.js";
+import { salesData } from "../../dimensionalCharting/data/datasets.js";
+import { ChartController } from "../../dimensionalCharting/chart/controller/chartController.js";
 import { MultiSelectionController } from "../../dimensionalCharting/chart/controller/multiSelectionController.js";
-import { HotspotController }        from "../../dimensionalCharting/chart/controller/hotspotController.js";
-import { LegendProjector }          from "../../dimensionalCharting/chart/projector/legendProjector.js";
-import { PieChartProjector }        from "../../dimensionalCharting/chart/projector/pieChartProjector.js";
-import { createSVG, reduceSum }     from "../../dimensionalCharting/util/chartUtil.js";
+import { HotspotController } from "../../dimensionalCharting/chart/controller/hotspotController.js";
+import { LegendProjector } from "../../dimensionalCharting/chart/projector/legendProjector.js";
+import { PieChartProjector } from "../../dimensionalCharting/chart/projector/pieChartProjector.js";
+import {
+	createSVG,
+	reduceSum,
+} from "../../dimensionalCharting/util/chartUtil.js";
 
 /**
  * Step 2: HTML Elements
  * Below are the HTML elements you will later use to append the svg of the pie chart & the legend.
  */
 
-const chart  = document.getElementById("chart");
+const chart = document.getElementById("chart");
 const legend = document.getElementById("chart-legend");
 
 // --------------------------------------------  STEP X  ---------------------------------------------------------------
@@ -46,13 +49,14 @@ const legend = document.getElementById("chart-legend");
  */
 
 // TODO: define a function which returns the category of a sales
-const groupBy = undefined;
+const groupBy = (v) => v.category;
 
 /** TODO: make use of the helper function {@link reduceSum} to sum the `sales` of each category */
-const groupFn = undefined;
+const groupFn = reduceSum((v) => v.sales);
 
 /** TODO: create a chart controller {@link ChartController } */
-const chartController = undefined;
+const chartController = ChartController(groupBy, groupFn);
+chartController.setSizeValueAccessor((p) => p.getValue());
 
 /**
  * The chart controller support different value accessor which the charts are using:
@@ -64,10 +68,9 @@ const chartController = undefined;
  * TODO: set the size value accessor of the `chartController` to the value of the partition.
  */
 
-
 /** TODO: create a selection controller {@link MultiSelectionController} and a hotspot controller {@link HotspotController} */
-const selectionController = undefined;
-const hotspotController   = undefined;
+const selectionController = MultiSelectionController();
+const hotspotController = HotspotController();
 
 /**
  * Step 4: Base SVG
@@ -77,10 +80,15 @@ const hotspotController   = undefined;
  * Detailed description: {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/viewBox}
  */
 
-/** @type ViewBoxType */ const viewBox = {x: 0, y: 0, width: 120, height: 120};
+/** @type ViewBoxType */ const viewBox = {
+	x: 0,
+	y: 0,
+	width: 120,
+	height: 120,
+};
 
 /** TODO: use the helper function {@link createSVG} to create the svg element the chart will be drawn in (define an id) */
-const svg = undefined;
+const svg = createSVG("chart", viewBox);
 
 /**
  * Step 5: Projectors
@@ -90,8 +98,19 @@ const svg = undefined;
  *
  * TODO: create a {@link PieChartProjector} and a {@link LegendProjector} using the controllers created above.
  */
-const chartSvg = undefined;
-const legendElement = undefined;
+const chartSvg = PieChartProjector({
+	chartController,
+	selectionController,
+	hotspotController,
+	viewBox,
+});
+
+const legendElement = LegendProjector({
+	chartController,
+	selectionController,
+	hotspotController,
+	labelAccessor: (p) => p.getKey(),
+});
 
 /**
  * Step 6: Append the projectors to the HTML elements
@@ -99,9 +118,11 @@ const legendElement = undefined;
  * TODO: append the legend elements to the legend HTML element
  */
 
-
 /** TODO: append the chart elements to the svg (created with {@link createSVG}) and then the svg  to the chart HTML element*/
 
+document.getElementById("chart-legend").appendChild(legendElement);
+svg.appendChild(chartSvg);
+document.getElementById("chart").appendChild(svg);
 
 /**
  * Step 7: Update the data
@@ -109,3 +130,5 @@ const legendElement = undefined;
  * Finally, we need to fill the chart with the data, we can do that by updating the data on the chart controller.
  * TODO: Update the data on the chart controller {@link ChartController} using the {@link salesData} dataset.
  */
+
+chartController.updateData(salesData);
